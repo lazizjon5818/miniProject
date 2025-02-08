@@ -1,6 +1,6 @@
-import { useRoutes } from "react-router-dom";
+import { useRoutes} from "react-router-dom";
 import { SuspenseContainer } from "../config";
-import { lazy } from "react";
+import { lazy, ReactNode } from "react";
 
 const SignUp = lazy(() => import("../pages/signUp/Signup"));
 const Layout = lazy(() => import("../pages/layout/Layout"));
@@ -9,42 +9,53 @@ const About = lazy(() => import("../pages/about/About"));
 const Contact = lazy(() => import("../pages/contact/Contact"));
 const NotFound = lazy(() => import("../pages/not-found/NotFound"));
 const Detail = lazy(() => import("../pages/detailPage/Detail"));
+const AccountPage = lazy(() => import("../pages/accaunt/AccauntPage")); 
+
+// const PrivateRoute = ({ children }: { children: ReactNode }) => {
+//   const isAuthenticated = Boolean(localStorage.getItem("user")); 
+//   if (!isAuthenticated) {
+//     return <NotFound />; 
+//   }
+
+//   return <>{children}</>;
+// };
 
 function Routers() {
-    const routes = useRoutes([
-        {
-            path: "/",
-            element: (
-                <SuspenseContainer>
-                    <Layout />
-                </SuspenseContainer>
-            ),
-            children: [
-                { path: "/", element: <Home /> },
-                { path: "/about", element: <About /> },
-                { path: "/contact", element: <Contact /> },
-                { path: "/detail", element: <Detail/>}
-            ],
-        },
-        {
-            path: "/auth/signup",
-            element: (
-                <SuspenseContainer>
-                    <SignUp />
-                </SuspenseContainer>
-            ),
-        },
-        {
-            path: "*",
-            element: (
-                <SuspenseContainer>
-                    <NotFound />
-                </SuspenseContainer>
-            ),
-        },
-    ]);
+  const routes = useRoutes([
+    {
+      path: "/",
+      element: (
+        <SuspenseContainer>
+          <Layout />
+        </SuspenseContainer>
+      ),
+      children: [
+        { path: "/", element: <SuspenseContainer><Home /></SuspenseContainer> },
+        { path: "/about", element: <SuspenseContainer><About /></SuspenseContainer> },
+        { path: "/contact", element: <SuspenseContainer><Contact /></SuspenseContainer> },
+        { path: "/product/:id", element: <SuspenseContainer><Detail /></SuspenseContainer> },
+        { path: "/account", element: <SuspenseContainer><AccountPage /></SuspenseContainer> }, {/* PrivateRoute ni olib tashladik */}
+      ],
+    },
+    {
+      path: "/auth/signup",
+      element: (
+        <SuspenseContainer>
+          <SignUp />
+        </SuspenseContainer>
+      ),
+    },
+    {
+      path: "*",
+      element: (
+        <SuspenseContainer>
+          <NotFound />
+        </SuspenseContainer>
+      ),
+    },
+  ]);
 
-    return <>{routes}</>;
+  return <>{routes}</>;
 }
 
 export default Routers;

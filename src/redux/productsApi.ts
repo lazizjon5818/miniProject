@@ -1,12 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Product,ProductDetail } from'../types/index'
 
-interface Product {
-    id: number;
-    title: string;
-    price: number;
-    thumbnail: string; 
-    rating: number;
-}
 
 interface ProductsResponse {
     products: Product[];
@@ -33,4 +27,30 @@ export const productsApi = createApi({
     }),
 });
 
+
+
+export const productDetailApi = createApi({
+    reducerPath: "productDetailApi",
+    baseQuery: fetchBaseQuery({
+        baseUrl: import.meta.env.VITE_BASE_URL,
+    }),
+    endpoints: (builder) => ({
+        getProductDetail: builder.query<ProductDetail, number>({
+            query: (id) => `products/${id}`,
+            transformResponse: (response: any): ProductDetail => ({
+                id: response.id,
+                title: response.title,
+                price: response.price,
+                description: response.description,
+                images: response.images,
+                rating: response.rating,
+                stock: response.stock,
+                brand: response.brand,
+                category: response.category,
+            }),
+        }),
+    }),
+});
+
 export const { useGetProductsQuery } = productsApi;
+export const { useGetProductDetailQuery } = productDetailApi;
