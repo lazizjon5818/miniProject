@@ -13,7 +13,7 @@ interface ProductProps {
 
 const Product: React.FC<ProductProps> = ({ products }) => {
   return (
-    <div className="w-full flex flex-wrap justify-center gap-3 md:gap-4 mb-12">
+    <div className="w-full container flex flex-wrap justify-center gap-3 md:gap-4 mb-12">
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}

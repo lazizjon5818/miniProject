@@ -14,7 +14,11 @@ interface ProductsResponse {
 
 export const productsApi = createApi({
     reducerPath: "productsApi",
-    baseQuery: fetchBaseQuery({ baseUrl: "https://dummyjson.com/" }),
+    baseQuery: fetchBaseQuery({ baseUrl: 
+        import.meta.env.VITE_BASE_URL,
+        method: "GET",
+        credentials: "include",
+     }),
     endpoints: (builder) => ({
         getProducts: builder.query<ProductsResponse, number>({
             query: (limit) => `products?limit=${limit}`,
