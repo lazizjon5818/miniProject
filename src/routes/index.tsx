@@ -1,6 +1,6 @@
 import { useRoutes} from "react-router-dom";
 import { SuspenseContainer } from "../config";
-import { lazy, ReactNode } from "react";
+import { lazy } from "react";
 
 const SignUp = lazy(() => import("../pages/signUp/Signup"));
 const Layout = lazy(() => import("../pages/layout/Layout"));
@@ -11,14 +11,7 @@ const NotFound = lazy(() => import("../pages/not-found/NotFound"));
 const Detail = lazy(() => import("../pages/detailPage/Detail"));
 const AccountPage = lazy(() => import("../pages/accaunt/AccauntPage")); 
 
-// const PrivateRoute = ({ children }: { children: ReactNode }) => {
-//   const isAuthenticated = Boolean(localStorage.getItem("user")); 
-//   if (!isAuthenticated) {
-//     return <NotFound />; 
-//   }
 
-//   return <>{children}</>;
-// };
 
 function Routers() {
   const routes = useRoutes([

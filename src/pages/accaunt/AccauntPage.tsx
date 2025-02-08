@@ -61,7 +61,6 @@ const AccountPage: React.FC = () => {
 
     return (
         <div className="container mx-auto px-4 py-8 min-h-[100vh] flex flex-col">
-            {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-sm mb-8">
                 <Link to="/" className="text-gray-500 hover:text-gray-700">Home</Link>
                 <span className="text-gray-500">/</span>
@@ -72,7 +71,6 @@ const AccountPage: React.FC = () => {
             </div>
 
             <div className="flex flex-col md:flex-row gap-8 flex-grow">
-                {/* Left Sidebar */}
                 <div className="md:w-1/4">
                     <div className="space-y-6">
                         <div>
@@ -110,7 +108,6 @@ const AccountPage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Right Content */}
                 <div className="md:w-3/4 h-full">
                     <h2 className="text-2xl font-semibold text-red-500 mb-6">Edit Your Profile</h2>
                     <form onSubmit={handleSubmit} className="space-y-10">

@@ -5,8 +5,8 @@ import { StarIcon as StarIconOutline } from "lucide-react";
 
 
 interface StarRatingProps {
-    rating: number;         // Rating soni
-    reviewCount: number;    // Reviewlar soni
+    rating: number;       
+    reviewCount: number;   
 }
 
 const ProductDetail = () => {
@@ -24,7 +24,6 @@ const ProductDetail = () => {
     if (error) return <div className="container mx-auto p-6"><p className="text-center text-red-500">Something went wrong!</p></div>;
     if (!product) return <div className="container mx-auto p-6"><p className="text-center text-gray-500">Product not found</p></div>;
 
-    // Breadcrumb navigation
     const Breadcrumb = () => (
         <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
             <span>Account</span>
@@ -55,7 +54,6 @@ const ProductDetail = () => {
             <Breadcrumb />
             
             <div className="flex flex-col lg:flex-row gap-8">
-                {/* Left Side - Product Images */}
                 <div className="flex gap-4 lg:w-2/3">
                     <div className="flex flex-col gap-4">
                         {product.images?.map((img, index) => (
@@ -77,7 +75,6 @@ const ProductDetail = () => {
                     </div>
                 </div>
 
-                {/* Right Side - Product Details */}
                 <div className="lg:w-1/3 flex flex-col gap-6">
                     <h1 className="text-3xl font-medium">{product.title}</h1>
                     <StarRating rating={4} reviewCount={150} />
@@ -87,7 +84,6 @@ const ProductDetail = () => {
                         PlayStation 5 Controller Skin High quality vinyl with air channel adhesive for easy bubble free install & mess free removal Pressure sensitive.
                     </p>
 
-                    {/* Colors */}
                     <div className="space-y-3">
                         <div className="font-medium">Colours:</div>
                         <div className="flex gap-2">
@@ -96,7 +92,6 @@ const ProductDetail = () => {
                         </div>
                     </div>
 
-                    {/* Sizes */}
                     <div className="space-y-3">
                         <div className="font-medium">Size:</div>
                         <div className="flex gap-2">
@@ -116,7 +111,6 @@ const ProductDetail = () => {
                         </div>
                     </div>
 
-                    {/* Quantity & Buy Button */}
                     <div className="flex items-center gap-4">
                         <div className="flex border rounded-md">
                             <button 
@@ -148,7 +142,6 @@ const ProductDetail = () => {
                         </button>
                     </div>
 
-                    {/* Delivery Info */}
                     <div className="border rounded-lg p-4 space-y-4">
                         <div className="flex items-center gap-4">
                             <div className="w-8 h-8">

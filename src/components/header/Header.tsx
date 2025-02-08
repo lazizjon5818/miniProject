@@ -13,12 +13,10 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // Close search if menu opens, and vice versa
   useEffect(() => {
     if (menuOpen) setSearchOpen(false);
   }, [menuOpen]);
 
-  // Navigation handler
   const handleNavigate = (href: string) => {
     navigate(href);
     setMenuOpen(false);
@@ -27,12 +25,10 @@ const Header = () => {
   return (
     <header className='border-b-2 bg-white shadow-md'>
       <div className='container mx-auto h-20 flex justify-between items-center px-4'>
-        {/* Logo */}
         <h2 onClick={() => navigate('/')} className='text-2xl font-medium cursor-pointer'>
           Exclusive
         </h2>
 
-        {/* Desktop Navigation */}
         <nav className='hidden lg:flex gap-4 text-sm text-gray-700'>
           <ul className='flex items-center gap-10'>
             {links.map((link) => (
@@ -45,7 +41,6 @@ const Header = () => {
           </ul>
         </nav>
 
-        {/* Desktop Icons */}
         <div className='hidden lg:flex items-center gap-6'>
           <div className='flex items-center border border-gray-400 rounded-md px-3 w-64 h-8'>
             <input 
@@ -65,7 +60,6 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu Toggle Button */}
         <button 
           onClick={() => setMenuOpen(!menuOpen)} 
           className='lg:hidden text-xl'
@@ -75,7 +69,6 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <div className={`fixed bottom-0 left-0 w-full bg-gradient-to-t from-black via-gray-900 to-transparent backdrop-blur-lg py-4 flex flex-col items-center gap-4 z-50 transition-transform duration-300 ease-in-out ${menuOpen ? 'translate-y-0' : 'translate-y-full'}`}>
         <div className='w-full flex justify-around items-center text-white text-lg'>
           <button onClick={() => handleNavigate('/')} className='flex flex-col items-center gap-1'>
@@ -112,7 +105,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Search Bar (Mobile) */}
       {searchOpen && (
         <div className='fixed top-0 left-0 w-full px-4 py-2 bg-black backdrop-blur-lg text-white flex items-center gap-2 transition-all duration-300'>
           <input 

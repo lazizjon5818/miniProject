@@ -27,3 +27,13 @@ export interface FormData {
     confirmPassword: string;
 }
 
+export interface ProductCardProps {
+    product: { 
+      id: number; 
+      title: string; 
+      price: number; 
+      thumbnail: string; 
+      rating: number; 
+    };
+  }
+
