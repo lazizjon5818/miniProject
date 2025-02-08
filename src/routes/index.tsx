@@ -8,6 +8,7 @@ const Home = lazy(() => import("../pages/home/Home"));
 const About = lazy(() => import("../pages/about/About"));
 const Contact = lazy(() => import("../pages/contact/Contact"));
 const NotFound = lazy(() => import("../pages/not-found/NotFound"));
+const Detail = lazy(() => import("../pages/detailPage/Detail"));
 
 function Routers() {
     const routes = useRoutes([
@@ -22,6 +23,7 @@ function Routers() {
                 { path: "/", element: <Home /> },
                 { path: "/about", element: <About /> },
                 { path: "/contact", element: <Contact /> },
+                { path: "/detail", element: <Detail/>}
             ],
         },
         {
