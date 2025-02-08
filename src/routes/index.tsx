@@ -2,7 +2,7 @@ import { useRoutes} from "react-router-dom";
 import { SuspenseContainer } from "../config";
 import { lazy } from "react";
 
-const SignUp = lazy(() => import("../pages/signUp/Signup"));
+const LoginPage = lazy(() => import("../pages/login/LoginPage"));
 const Layout = lazy(() => import("../pages/layout/Layout"));
 const Home = lazy(() => import("../pages/home/Home"));
 const About = lazy(() => import("../pages/about/About"));
@@ -31,10 +31,10 @@ function Routers() {
       ],
     },
     {
-      path: "/auth/signup",
+      path: "/auth/login",
       element: (
         <SuspenseContainer>
-          <SignUp />
+          <LoginPage/>
         </SuspenseContainer>
       ),
     },

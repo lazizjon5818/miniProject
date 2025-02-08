@@ -22,8 +22,8 @@ export const links = [
   },
   {
     id: 4,
-    title: "Signup",
-    href: "/auth/signup",
+    title: "Login",
+    href: "/auth/login",
     icon: "user",
     active: true,
   },

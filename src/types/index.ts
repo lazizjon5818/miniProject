@@ -5,6 +5,18 @@ export interface Product {
     thumbnail: string; 
     rating: number;
 }
+
+export interface LoginResponse {
+    token: string; 
+}
+
+
+export interface LoginRequest {
+    username: string;
+    password: string;
+}
+
+
 export interface ProductDetail {
     id: number;
     title: string;

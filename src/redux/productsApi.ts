@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Product,ProductDetail } from'../types/index'
+import { Product,ProductDetail,LoginResponse,LoginRequest } from'../types/index'
+
 
 
 interface ProductsResponse {
@@ -52,5 +53,25 @@ export const productDetailApi = createApi({
     }),
 });
 
+
+export const loginApi = createApi({
+    reducerPath: 'loginApi',
+    baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_USER_LOGIN_URL }),
+    endpoints: (builder) => ({
+        login: builder.mutation<LoginResponse, LoginRequest>({
+            query: (credentials) => ({
+                url: '/user/login', 
+                method: 'POST',
+                body: credentials,
+            }),
+            transformResponse: (response: any): LoginResponse => ({
+                token: response.token,
+            }),
+        }),
+    }),
+})
+
+
+export const { useLoginMutation } = loginApi;
 export const { useGetProductsQuery } = productsApi;
 export const { useGetProductDetailQuery } = productDetailApi;
