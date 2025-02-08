@@ -8,16 +8,13 @@ const useOnlineStatus = () => {
     const handleOnline = () => setOnline(true);
     const handleOffline = () => setOnline(false);
 
-    // Brauzerning online/offline hodisalariga quloq solish
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
-    // Birinchi kirish holatini belgilash
     if (firstEnter) {
       setFirstEnter(false);
     }
 
-    // Cleanup: Quloq soluvchilarni olib tashlash
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);

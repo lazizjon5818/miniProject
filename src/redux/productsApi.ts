@@ -4,8 +4,8 @@ interface Product {
     id: number;
     title: string;
     price: number;
-    thumbnail: string; // image o'rniga
-    rating: number; // rating.rate dan olinadi
+    thumbnail: string; 
+    rating: number;
 }
 
 interface ProductsResponse {
@@ -23,8 +23,8 @@ export const productsApi = createApi({
                     id: product.id,
                     title: product.title,
                     price: product.price,
-                    thumbnail: product.thumbnail, // image maydoni o'rniga
-                    rating: product.rating, // rating obyektidan olindi
+                    thumbnail: product.thumbnail, 
+                    rating: product.rating, 
                 }))
             })
         }),

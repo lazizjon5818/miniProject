@@ -1,5 +1,5 @@
 import React from "react";
-import ProductCard from "./ProductCard"; // ProductCard komponentini chaqiramiz
+import ProductCard from "./ProductCard"; 
 
 interface ProductProps {
   products: Array<{ 

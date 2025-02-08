@@ -14,7 +14,6 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <div className="relative border p-4 rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 group w-full sm:w-[48%] md:w-72">
-      {/* Wishlist va Ko'rish tugmalari */}
       <div className="absolute top-3 right-3 flex flex-col gap-2">
         <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 transition">
           <FaHeart className="text-gray-600" />
@@ -24,7 +23,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </button>
       </div>
 
-      {/* Rasm va "Add to Cart" tugmasi */}
       <div className="relative w-full h-40 flex items-center justify-center overflow-hidden">
         <img 
           src={product.thumbnail} 
@@ -36,14 +34,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </button>
       </div>
 
-      {/* Mahsulot nomi */}
       <h2 className="text-md font-semibold mt-2">{product.title}</h2>
 
-      {/* Narx */}
-      <p className="text-red-600 text-lg font-bold">${product.price}</p>
+       <p className="text-red-600 text-lg font-bold">${product.price}</p>
 
-      {/* Reyting */}
-      <div className="flex items-center gap-1 mt-1">
+       <div className="flex items-center gap-1 mt-1">
         {Array.from({ length: 5 }).map((_, i) =>
           i < product.rating ? (
             <FaStar key={i} className="text-yellow-400" />
