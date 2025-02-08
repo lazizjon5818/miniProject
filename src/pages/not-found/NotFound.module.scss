@@ -1,0 +1,137 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans|PT+Sans+Narrow");
+
+$in-out-cubic: cubic-bezier(0.65, 0.05, 0.36, 1);
+
+@mixin transform($transform...) {
+  transform: $transform;
+}
+
+@mixin animation($animation...) {
+  animation: $animation;
+}
+
+body {
+  overflow: hidden;
+  font-family: "Open Sans", sans-serif;
+  background: #87CEEB;
+}
+
+.notFound {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  height: 100vh;
+
+  div {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+  }
+
+  .skyBg {
+    background: url("https://res.cloudinary.com/andrewhani/image/upload/v1524821915/404/bg-1_gvybzk.svg") no-repeat center center/cover;
+    height: 100%;
+  }
+
+  @for $i from 1 through 7 {
+    .wave#{$i} {
+      background: url("https://res.cloudinary.com/andrewhani/image/upload/v1524501869/404/wave-#{$i}.svg") no-repeat center center/cover;
+      height: calc(100% - 250px);
+    }
+  }
+
+  .wave4 {
+    height: calc(100% - 430px);
+  }
+
+  .boat {
+    position: absolute;
+    top: 5%;
+    right: 10%;
+    width: 120px;
+    @include animation(boat 15s $in-out-cubic infinite);
+  }
+
+  .waveLost {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 12vw;
+    span {
+      float: left;
+      @include animation(float 3s ease-in-out infinite);
+    }
+  }
+
+  .waveIsland {
+    position: absolute;
+    top: 20%;
+    left: 15%;
+    width: 15%;
+  }
+
+  .waveMessage {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 3vw;
+    text-align: center;
+    width: 80%;
+  }
+}
+
+@keyframes boat {
+  0% {
+    transform: rotate(-10deg) translate3d(400px, 0px, 0px);
+  }
+  100% {
+    transform: rotate(5deg) translate3d(-100vw, 0, 0px);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: rotate(3deg) translate3d(0px, -10px, 0px);
+  }
+  50% {
+    transform: rotate(-3deg) translate3d(0px, 10px, 0px);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .notFound {
+    .waveLost {
+      font-size: 15vw;
+    }
+    .waveMessage {
+      font-size: 4vw;
+    }
+    .boat {
+      width: 100px;
+      top: 10%;
+      right: 5%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .notFound {
+    .waveLost {
+      font-size: 18vw;
+    }
+    .waveMessage {
+      font-size: 5vw;
+    }
+    .boat {
+      width: 80px;
+      top: 15%;
+      right: 5%;
+    }
+  }
+}
