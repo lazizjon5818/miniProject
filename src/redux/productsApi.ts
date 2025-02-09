@@ -56,21 +56,24 @@ export const productDetailApi = createApi({
 
 export const loginApi = createApi({
     reducerPath: 'loginApi',
-    baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_USER_LOGIN_URL }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://dummyjson.com/' }),
     endpoints: (builder) => ({
         login: builder.mutation<LoginResponse, LoginRequest>({
             query: (credentials) => ({
-                url: '/user/login', 
+                url: 'auth/login',
                 method: 'POST',
                 body: credentials,
             }),
-            transformResponse: (response: any): LoginResponse => ({
-                token: response.token,
-            }),
+            transformResponse: (response: any): LoginResponse => {
+                console.log('API response:', response);
+                return response; 
+            },
         }),
     }),
-})
+});
 
+
+// emilys
 
 export const { useLoginMutation } = loginApi;
 export const { useGetProductsQuery } = productsApi;

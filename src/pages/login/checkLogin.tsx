@@ -1,24 +1,23 @@
-// Component that checks if the user is authenticated
-import { useEffect, useState } from 'react';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const ProtectedPage = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+const ProtectedPage: React.FC = () => {
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+    console.log(localStorage.getItem("token"));
+
 
     useEffect(() => {
-        // Tokenni tekshirish
-        const token = localStorage.getItem('token');
-        if (token) {
-            setIsAuthenticated(true);
-        } else {
-            setIsAuthenticated(false);
+        if (!token) {
+            navigate("/auth/login");
         }
-    }, []);
+    }, [navigate, token]);
 
-    if (!isAuthenticated) {
-        return <p>You must log in to access this page.</p>;
+    if (!token) {
+        return <p className="text-center text-lg font-semibold">Redirecting to login...</p>;
     }
 
-    return <p>Welcome to the protected page!</p>;
+    return <p className="text-center text-lg font-bold">Welcome to the protected page! 🎉</p>;
 };
 
 export default ProtectedPage;

@@ -6,15 +6,6 @@ export interface Product {
     rating: number;
 }
 
-export interface LoginResponse {
-    token: string; 
-}
-
-
-export interface LoginRequest {
-    username: string;
-    password: string;
-}
 
 
 export interface ProductDetail {
@@ -48,4 +39,24 @@ export interface ProductCardProps {
       rating: number; 
     };
   }
+
+
+export interface LoginRequest {
+    username: string;
+    password: string;
+  }
+  
+ export interface LoginResponse {
+    accessToken: string;
+    refreshToken: string;
+    id: number;
+    username: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    gender: string;
+    image: string;
+  }
+  
+
 

@@ -1,24 +1,47 @@
 import React from "react";
 import { FaHeart, FaEye, FaStar, FaRegStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { addToWishlist, removeFromWishlist } from "../../redux/wishlistSlice";
 
 interface ProductCardProps {
-  product: { 
-    id: number; 
-    title: string; 
-    price: number; 
-    thumbnail: string; 
-    rating: number; 
+  product: {
+    id: number;
+    title: string;
+    price: number;
+    thumbnail: string;
+    rating: number;
   };
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const wishlist = useSelector((state: RootState) => state.wishlist.items);
+
+  // Mahsulot wishlistda borligini tekshirish
+  const isInWishlist = wishlist.some((item) => item.id === product.id);
+
+  // Wishlist tugmachasini bosganda mahsulot qo‘shish yoki olib tashlash
+  const handleWishlistClick = () => {
+    if (isInWishlist) {
+      dispatch(removeFromWishlist(product.id));
+    } else {
+      dispatch(addToWishlist(product));
+    }
+  };
+
   return (
     <div className="relative border p-4 rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 group w-full sm:w-[48%] md:w-72">
       <div className="absolute top-3 right-3 flex flex-col gap-2">
-        <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 transition">
-          <FaHeart className="text-gray-600" />
+        <button
+          onClick={handleWishlistClick}
+          className={`p-2 rounded-full shadow-md transition ${
+            isInWishlist ? "bg-red-500 text-white" : "bg-white hover:bg-gray-200"
+          }`}
+        >
+          <FaHeart className={isInWishlist ? "text-white" : "text-gray-600"} />
         </button>
         <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 transition">
           <FaEye className="text-gray-600" />
@@ -27,11 +50,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
       <div className="relative w-full h-40 flex items-center justify-center overflow-hidden">
         <img
-          src={product.thumbnail} 
-          alt={product.title} 
+          src={product.thumbnail}
+          alt={product.title}
           className="w-3/4 h-full object-contain"
           onClick={() => navigate(`/product/${product.id}`)}
-          />
+        />
         <button className="absolute bottom-0 left-0 right-0 bg-black text-white py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Add To Cart
         </button>
@@ -39,9 +62,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
       <h2 className="text-md font-semibold mt-2">{product.title}</h2>
 
-       <p className="text-red-600 text-lg font-bold">${product.price}</p>
+      <p className="text-red-600 text-lg font-bold">${product.price}</p>
 
-       <div className="flex items-center gap-1 mt-1">
+      <div className="flex items-center gap-1 mt-1">
         {Array.from({ length: 5 }).map((_, i) =>
           i < product.rating ? (
             <FaStar key={i} className="text-yellow-400" />

@@ -1,6 +1,7 @@
-import { useRoutes} from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 import { SuspenseContainer } from "../config";
 import { lazy } from "react";
+// import ProtectedRoute from "../pages/login/checkLogin"; 
 
 const LoginPage = lazy(() => import("../pages/login/LoginPage"));
 const Layout = lazy(() => import("../pages/layout/Layout"));
@@ -9,9 +10,8 @@ const About = lazy(() => import("../pages/about/About"));
 const Contact = lazy(() => import("../pages/contact/Contact"));
 const NotFound = lazy(() => import("../pages/not-found/NotFound"));
 const Detail = lazy(() => import("../pages/detailPage/Detail"));
-const AccountPage = lazy(() => import("../pages/accaunt/AccauntPage")); 
-
-
+const AccountPage = lazy(() => import("../pages/accaunt/AccauntPage"));
+const Wishlist = lazy(() => import("../pages/wishlist/WishlistPage"));
 
 function Routers() {
   const routes = useRoutes([
@@ -27,17 +27,27 @@ function Routers() {
         { path: "/about", element: <SuspenseContainer><About /></SuspenseContainer> },
         { path: "/contact", element: <SuspenseContainer><Contact /></SuspenseContainer> },
         { path: "/product/:id", element: <SuspenseContainer><Detail /></SuspenseContainer> },
-        { path: "/account", element: <SuspenseContainer><AccountPage /></SuspenseContainer> }, {/* PrivateRoute ni olib tashladik */}
+        { path: "/wishlist", element: <SuspenseContainer><Wishlist /></SuspenseContainer> },
+        {
+          path: "/account",
+          element: (
+              <SuspenseContainer>
+                <AccountPage />
+              </SuspenseContainer>
+          ),
+        },
       ],
     },
+
     {
       path: "/auth/login",
       element: (
         <SuspenseContainer>
-          <LoginPage/>
+          <LoginPage />
         </SuspenseContainer>
       ),
     },
+
     {
       path: "*",
       element: (
