@@ -1,68 +1,73 @@
 import { useState } from "react";
 import { useLoginMutation } from "../../redux/productsApi";
-import image from './Side Image.png'
+import image from "./Side Image.png";
 import { LoginResponse } from "../../types";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../config/Loading";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({ username: "", password: "" });
   const [login, { isLoading, error }] = useLoginMutation();
   const navigate = useNavigate();
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    const { username, password } = formData;
 
     if (!username || !password) {
-        console.error("Username or password is missing!");
-        return;
+      console.error("Username or password is missing!");
+      return;
     }
 
     try {
-        const data: LoginResponse = await login({ username, password }).unwrap();
-        console.log("Login successful:", data);
+      const data: LoginResponse = await login({ username, password }).unwrap();
+      console.log("Login successful:", data);
 
-        if (data.accessToken) {
-            localStorage.setItem("token", data.accessToken);
-            navigate("/");
-        } else {
-            console.error("Token not found in response:", data);
-        }
-        console.log(localStorage.getItem("token"));
-    } catch (err) {
-        console.error("Login failed:", JSON.stringify(err));
+      if (data.accessToken) {
+        localStorage.setItem("token", data.accessToken);
+        navigate("/");
+      } else {
+        console.error("Token not found in response:", data);
+      }
+    } catch (err: any) {
+      console.error("Login failed:", err.data?.message || "Something went wrong.");
     }
-};
-
-
+  };
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center bg-white">
-      <div className="w-[1170px] h-[781px] flex">
+    <div className="w-full h-screen flex items-center justify-center bg-white px-4 sm:px-8">
+      <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden">
         
-        <div className="w-1/2 h-full flex items-center justify-center">
+        {/* LEFT IMAGE SECTION */}
+        <div className="md:w-1/2 w-full h-56 md:h-auto flex items-center justify-center bg-gray-100">
           <img
             src={image}
             alt="Login Illustration"
-            className="max-w-full h-auto"
+            className="max-w-[80%] md:max-w-full h-auto object-contain"
           />
         </div>
 
-        <div className="w-1/2 h-full flex flex-col justify-center px-16">
-          <h2 className="text-3xl font-semibold mb-2">Log in to Exclusive</h2>
-          <p className="text-gray-600 mb-6">Enter your details below</p>
+        {/* RIGHT FORM SECTION */}
+        <div className="md:w-1/2 w-full flex flex-col justify-center p-6 md:p-12">
+          <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-center md:text-left">
+            Log in to Exclusive
+          </h2>
+          <p className="text-gray-600 mb-6 text-center md:text-left">Enter your details below</p>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-6 max-w-sm mx-auto md:mx-0">
             <div>
               <input
                 type="text"
                 id="username"
                 placeholder="Email or Phone Number"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={formData.username}
+                onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-b border-gray-300  focus:outline-none focus:border-black"
+                className="w-full px-4 py-3  border-b transition outline-none"
               />
             </div>
             <div>
@@ -70,31 +75,36 @@ const LoginPage = () => {
                 type="password"
                 id="password"
                 placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formData.password}
+                onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-b border-gray-300 focus:outline-none focus:border-black"
+                className="w-full px-4 py-3  border-b transition outline-none"
               />
             </div>
-            <div className="flex justify-between items-center">
-              {isLoading ? (
-                <Loading />
-              ) : (
-                <button 
-                  type="submit"
-                  disabled={isLoading}
-                  className="bg-red-600 text-white py-3 w-[141px] rounded-md hover:bg-red-700 transition"
-                >
-                  Log In
-                </button>
-              )}
-              {error && <p style={{ color: 'red' }}>Login failed: {JSON.stringify(error)}</p>}
-              <div className="text-right mt-3">
+            
+            <div className="flex flex-col sm:flex-row sm:justify-between items-center">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`py-3 w-full sm:w-[141px] rounded-md transition text-white ${
+                  isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700"
+                }`}
+              >
+                {isLoading ? <Loading /> : "Log In"}
+              </button>
+
+              <div className="text-right mt-3 sm:mt-0">
                 <a href="#" className="text-red-600 text-sm hover:underline">
                   Forgot Password?
                 </a>
               </div>
             </div>
+
+            {error && (
+              <p className="text-red-500 text-sm text-center mt-2">
+                Login failed: {JSON.stringify(error)}
+              </p>
+            )}
           </form>
         </div>
       </div>
