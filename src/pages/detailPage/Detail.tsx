@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from "react-router-dom";
 import { useGetProductDetailQuery } from "../../redux/productsApi";
 import { StarIcon as StarIconOutline } from "lucide-react";
+import Loading from '../../config/Loading';
 
 
 interface StarRatingProps {
@@ -20,7 +21,7 @@ const ProductDetail = () => {
         skip: isNaN(productId),
     });
 
-    if (isLoading) return <div className="container mx-auto p-6"><p className="text-center text-lg">Loading...</p></div>;
+    if (isLoading) return <div className="container mx-auto p-6"><p className="text-center text-lg"><Loading/></p></div>;
     if (error) return <div className="container mx-auto p-6"><p className="text-center text-red-500">Something went wrong!</p></div>;
     if (!product) return <div className="container mx-auto p-6"><p className="text-center text-gray-500">Product not found</p></div>;
 

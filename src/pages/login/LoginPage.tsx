@@ -3,6 +3,7 @@ import { useLoginMutation } from "../../redux/productsApi";
 import image from './Side Image.png'
 import { LoginResponse } from "../../types";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../config/Loading";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -76,23 +77,25 @@ const LoginPage = () => {
               />
             </div>
             <div className="flex justify-between items-center">
+              {isLoading ? (
+                <Loading />
+              ) : (
                 <button 
-                type="submit"
-                disabled={isLoading}
-                className=" bg-red-600 text-white py-3 w-[141px] rounded-md hover:bg-red-700 transition"
+                  type="submit"
+                  disabled={isLoading}
+                  className="bg-red-600 text-white py-3 w-[141px] rounded-md hover:bg-red-700 transition"
                 >
-                {isLoading ? "Logging in..." : "Log In"}
-                {error && <p style={{ color: 'red' }}>Login failed: {JSON.stringify(error)}</p>}
+                  Log In
                 </button>
-                <div className="text-right mt-3">
-                    <a href="#" className="text-red-600 text-sm hover:underline">
-                    Forgot Password?
-                    </a>
-                </div>
+              )}
+              {error && <p style={{ color: 'red' }}>Login failed: {JSON.stringify(error)}</p>}
+              <div className="text-right mt-3">
+                <a href="#" className="text-red-600 text-sm hover:underline">
+                  Forgot Password?
+                </a>
+              </div>
             </div>
-
           </form>
-
         </div>
       </div>
     </div>

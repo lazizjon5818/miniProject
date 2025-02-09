@@ -73,8 +73,7 @@ export const loginApi = createApi({
 });
 
 
-// emilys
-
+ 
 export const { useLoginMutation } = loginApi;
 export const { useGetProductsQuery } = productsApi;
 export const { useGetProductDetailQuery } = productDetailApi;

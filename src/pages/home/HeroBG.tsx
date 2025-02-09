@@ -5,7 +5,7 @@ import { IoMdArrowForward } from "react-icons/io";
 
 function HeroBG() {
   return (
-    <div className="mt-12"> {/* Headerdan keyin bo‘shliq qo‘shdik */}
+    <div className="mt-12"> 
       <div className='container h-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-center px-6 md:px-12 py-6 bg-black'>
         <div className="flex flex-col gap-4 text-center md:text-left">
           <BsApple className='text-white text-3xl mx-auto md:mx-0' />

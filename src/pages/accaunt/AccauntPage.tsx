@@ -1,19 +1,39 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../../redux/store';
+import { fetchUserData, updateUserData, logout } from '../../redux/userSlice';
 import { FormData } from '../../types';
 
-
-
 const AccountPage: React.FC = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+
+    const { firstName, lastName, email, address, isLoggedIn, loading, error } = useSelector(
+        (state: RootState) => state.user
+    );
+
     const [formData, setFormData] = useState<FormData>({
-        firstName: 'Md',
-        lastName: 'Rimel',
-        email: 'rimel1111@gmail.com',
-        address: 'Kingston, 5236, United State',
+        firstName: '',
+        lastName: '',
+        email: '',
+        address: '',
         currentPassword: '',
         newPassword: '',
         confirmPassword: ''
     });
+
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate('/auth/login');
+        } else {
+            dispatch(fetchUserData());
+        }
+    }, [isLoggedIn, dispatch, navigate]);
+
+    useEffect(() => {
+        setFormData({ firstName, lastName, email, address, currentPassword: '', newPassword: '', confirmPassword: '' });
+    }, [firstName, lastName, email, address]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -25,7 +45,12 @@ const AccountPage: React.FC = () => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
+        dispatch(updateUserData(formData));
+    };
+
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate('/auth/login');
     };
 
     const menuItems = {
@@ -40,12 +65,7 @@ const AccountPage: React.FC = () => {
         ]
     };
 
-    const renderInput = (
-        label: string,
-        name: keyof FormData,
-        type: string = 'text',
-        placeholder?: string
-    ) => (
+    const renderInput = (label: string, name: keyof FormData, type: string = 'text', placeholder?: string) => (
         <div>
             {label && <label className="block mb-2">{label}</label>}
             <input
@@ -66,8 +86,14 @@ const AccountPage: React.FC = () => {
                 <span className="text-gray-500">/</span>
                 <span>My Account</span>
                 <div className="ml-auto">
-                    Welcome! <span className="text-red-500">Md Rimel</span>
+                    Welcome! <span className="text-red-500">{firstName} {lastName}</span>
                 </div>
+                <button
+                    onClick={handleLogout}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                >
+                    Logout
+                </button>
             </div>
 
             <div className="flex flex-col md:flex-row gap-8 flex-grow">
@@ -110,36 +136,42 @@ const AccountPage: React.FC = () => {
 
                 <div className="md:w-3/4 h-full">
                     <h2 className="text-2xl font-semibold text-red-500 mb-6">Edit Your Profile</h2>
-                    <form onSubmit={handleSubmit} className="space-y-10">
-                        <div className="grid md:grid-cols-2 gap-6">
-                            {renderInput('First Name', 'firstName')}
-                            {renderInput('Last Name', 'lastName')}
-                            {renderInput('Email', 'email', 'email')}
-                            {renderInput('Address', 'address')}
-                        </div>
+                    {loading ? (
+                        <p>Loading...</p>
+                    ) : error ? (
+                        <p className="text-red-500">{error}</p>
+                    ) : (
+                        <form onSubmit={handleSubmit} className="space-y-10">
+                            <div className="grid md:grid-cols-2 gap-6">
+                                {renderInput('First Name', 'firstName')}
+                                {renderInput('Last Name', 'lastName')}
+                                {renderInput('Email', 'email', 'email')}
+                                {renderInput('Address', 'address')}
+                            </div>
 
-                        <div className="space-y-4">
-                            <h3 className="font-semibold text-lg">Password Changes</h3>
-                            {renderInput('', 'currentPassword', 'password', 'Current Password')}
-                            {renderInput('', 'newPassword', 'password', 'New Password')}
-                            {renderInput('', 'confirmPassword', 'password', 'Confirm New Password')}
-                        </div>
+                            <div className="space-y-4">
+                                <h3 className="font-semibold text-lg">Password Changes</h3>
+                                {renderInput('', 'currentPassword', 'password', 'Current Password')}
+                                {renderInput('', 'newPassword', 'password', 'New Password')}
+                                {renderInput('', 'confirmPassword', 'password', 'Confirm New Password')}
+                            </div>
 
-                        <div className="flex justify-end gap-4">
-                            <button 
-                                type="button" 
-                                className="px-6 py-2 rounded hover:bg-gray-100 transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button 
-                                type="submit" 
-                                className="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
-                            >
-                                Save Changes
-                            </button>
-                        </div>
-                    </form>
+                            <div className="flex justify-end gap-4">
+                                <button 
+                                    type="button" 
+                                    className="px-6 py-2 rounded hover:bg-gray-100 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                                >
+                                    Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    )}
                 </div>
             </div>
         </div>

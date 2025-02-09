@@ -1,77 +1,114 @@
-import React from "react";
+import React, { useEffect, useCallback, useMemo } from "react";
 import { FaHeart, FaEye, FaStar, FaRegStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { addToWishlist, removeFromWishlist } from "../../redux/wishlistSlice";
+import { addToWishlist, removeFromWishlist, setWishlist } from "../../redux/wishlistSlice";
+
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  thumbnail: string;
+  rating: number;
+}
 
 interface ProductCardProps {
-  product: {
-    id: number;
-    title: string;
-    price: number;
-    thumbnail: string;
-    rating: number;
-  };
+  product: Product;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const wishlist = useSelector((state: RootState) => state.wishlist.items);
+  
+  const isInWishlist = useMemo(
+    () => wishlist.some((item) => item.id === product.id),
+    [wishlist, product.id]
+  );
 
-  // Mahsulot wishlistda borligini tekshirish
-  const isInWishlist = wishlist.some((item) => item.id === product.id);
-
-  // Wishlist tugmachasini bosganda mahsulot qo‘shish yoki olib tashlash
-  const handleWishlistClick = () => {
-    if (isInWishlist) {
-      dispatch(removeFromWishlist(product.id));
-    } else {
-      dispatch(addToWishlist(product));
+  useEffect(() => {
+    try {
+      const savedWishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      if (Array.isArray(savedWishlist)) {
+        dispatch(setWishlist(savedWishlist));
+      }
+    } catch (error) {
+      console.error("Error parsing wishlist from localStorage:", error);
     }
-  };
+  }, [dispatch]);
+
+  const handleWishlistClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      const updatedWishlist = isInWishlist
+        ? wishlist.filter((item) => item.id !== product.id)
+        : [...wishlist, product];
+
+      dispatch(isInWishlist ? removeFromWishlist(product.id) : addToWishlist(product));
+
+      try {
+        localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      } catch (error) {
+        console.error("Error updating wishlist in localStorage:", error);
+      }
+    },
+    [isInWishlist, wishlist, product, dispatch]
+  );
 
   return (
-    <div className="relative border p-4 rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 group w-full sm:w-[48%] md:w-72">
-      <div className="absolute top-3 right-3 flex flex-col gap-2">
-        <button
+    <div 
+      className="w-[270px] h-[322px] relative border rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 group cursor-pointer overflow-hidden"
+      onClick={() => navigate(`/product/${product.id}`)}
+    >
+      <div className="absolute top-4 right-4 flex flex-col gap-3 z-10">
+        <button 
           onClick={handleWishlistClick}
-          className={`p-2 rounded-full shadow-md transition ${
-            isInWishlist ? "bg-red-500 text-white" : "bg-white hover:bg-gray-200"
+          className={`w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md hover:shadow-lg transition-all ${
+            isInWishlist ? "bg-red-50" : "hover:bg-gray-50"
           }`}
+          aria-label="Add to wishlist"
         >
-          <FaHeart className={isInWishlist ? "text-white" : "text-gray-600"} />
+          <FaHeart className={`text-xl ${isInWishlist ? "text-red-500" : "text-gray-400 hover:text-red-500"}`} />
         </button>
-        <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 transition">
-          <FaEye className="text-gray-600" />
+        <button 
+          className="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md hover:shadow-lg hover:bg-gray-50 transition-all"
+          aria-label="View details"
+        >
+          <FaEye className="text-xl text-gray-400 hover:text-gray-600" />
         </button>
       </div>
 
-      <div className="relative w-full h-40 flex items-center justify-center overflow-hidden">
-        <img
-          src={product.thumbnail}
-          alt={product.title}
-          className="w-3/4 h-full object-contain"
-          onClick={() => navigate(`/product/${product.id}`)}
-        />
-        <button className="absolute bottom-0 left-0 right-0 bg-black text-white py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <div className="w-full h-[250px] relative">
+        <div className="w-full h-[210px] flex items-center justify-center">
+          <img
+            src={product.thumbnail}
+            alt={product.title}
+            className="w-3/4 h-full object-contain"
+            loading="lazy"
+          />
+        </div>
+        <button className="absolute bottom-0 left-0 w-full h-[40px] bg-black text-white text-lg text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Add To Cart
         </button>
       </div>
 
-      <h2 className="text-md font-semibold mt-2">{product.title}</h2>
-
-      <p className="text-red-600 text-lg font-bold">${product.price}</p>
-
-      <div className="flex items-center gap-1 mt-1">
-        {Array.from({ length: 5 }).map((_, i) =>
-          i < product.rating ? (
-            <FaStar key={i} className="text-yellow-400" />
-          ) : (
-            <FaRegStar key={i} className="text-gray-400" />
-          )
-        )}
+      <div className="h-[72px] px-4 py-2 flex flex-col justify-between">
+        <div>
+          <h2 className="text-base font-semibold line-clamp-1">{product.title}</h2>
+          <p className="text-red-600 text-base font-bold">${product.price.toFixed(2)}</p>
+        </div>
+        <div className="flex items-center gap-0.5">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <span key={i}>
+              {i < Math.floor(product.rating) ? (
+                <FaStar className="text-yellow-400 text-sm" />
+              ) : (
+                <FaRegStar className="text-gray-300 text-sm" />
+              )}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -18,7 +18,6 @@ const Header = () => {
   useEffect(() => {
     if (menuOpen) setSearchOpen(false);
 
-    // Tokenni localStorage-dan tekshiramiz
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, [menuOpen]);
@@ -38,7 +37,6 @@ const Header = () => {
           Exclusive
         </h2>
 
-        {/* Navbar (Desktop) */}
         <nav className="hidden lg:flex gap-4 text-sm text-gray-700">
           <ul className="flex items-center gap-10">
           {links
@@ -61,7 +59,6 @@ const Header = () => {
           </ul>
         </nav>
 
-        {/* Search va Icons */}
         <div className="hidden lg:flex items-center gap-6">
           <div className="flex items-center border border-gray-400 rounded-md px-3 w-64 h-8">
             <input
@@ -85,7 +82,6 @@ const Header = () => {
               onClick={() => navigate("/cart")}
             />
             
-            {/* User icon (Login bo'lsa orqa foni ko'k bo'ladi) */}
             <div
               onClick={() => handleNavigate("/account")}
               className={`cursor-pointer p-2 rounded-full ${
@@ -97,7 +93,6 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobil menyu tugmasi */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="lg:hidden text-xl"
@@ -107,7 +102,6 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Mobil menyu */}
       <div
         className={`fixed bottom-0 left-0 w-full bg-gradient-to-t from-black via-gray-900 to-transparent backdrop-blur-lg py-4 flex flex-col items-center gap-4 z-50 transition-transform duration-300 ease-in-out ${
           menuOpen ? "translate-y-0" : "translate-y-full"

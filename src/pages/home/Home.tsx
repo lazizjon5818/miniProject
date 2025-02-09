@@ -2,12 +2,13 @@ import React from "react";
 import Product from "../../components/product/Product";
 import { useGetProductsQuery } from '../../redux/productsApi';
 import HeroBG from "./HeroBG";
+import Loading from "../../config/Loading";
 
 const Home: React.FC = () => {
   const { data, error, isLoading } = useGetProductsQuery(12);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p><Loading/></p>;
   }
 
   if (error) {

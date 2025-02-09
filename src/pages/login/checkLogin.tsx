@@ -1,23 +1,19 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store'
 
-const ProtectedPage: React.FC = () => {
-    const navigate = useNavigate();
-    const token = localStorage.getItem("token");
-    console.log(localStorage.getItem("token"));
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
 
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  
+  if (!isLoggedIn) {
+    return <Navigate to="/auth/login" replace />;
+  }
 
-    useEffect(() => {
-        if (!token) {
-            navigate("/auth/login");
-        }
-    }, [navigate, token]);
-
-    if (!token) {
-        return <p className="text-center text-lg font-semibold">Redirecting to login...</p>;
-    }
-
-    return <p className="text-center text-lg font-bold">Welcome to the protected page! 🎉</p>;
+  return <>{children}</>;
 };
 
-export default ProtectedPage;
+export default ProtectedRoute;
