@@ -2,11 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import wishlistReducer from "./wishlistSlice";
 import { loginApi, productDetailApi, productsApi } from "./productsApi";
 import authReducer from "./authSlice";
+import userReducer from "./authSlice";
+
 
 export const store = configureStore({
   reducer: {
     wishlist: wishlistReducer,
     auth: authReducer,
+    user: userReducer,
     [productsApi.reducerPath]: productsApi.reducer,
     [productDetailApi.reducerPath]: productDetailApi.reducer,
     [loginApi.reducerPath]: loginApi.reducer,

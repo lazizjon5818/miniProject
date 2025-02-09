@@ -23,7 +23,7 @@ export const links = [
   
   {
     id: 4,
-    title: "Login",
+    title: "Signup",
     href: "/auth/login",
     icon: "user",
     active: true,

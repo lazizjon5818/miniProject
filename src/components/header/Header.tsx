@@ -10,12 +10,17 @@ import { BiInfoCircle, BiPhoneCall } from "react-icons/bi";
 
 const Header = () => {
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     if (menuOpen) setSearchOpen(false);
+
+    // Tokenni localStorage-dan tekshiramiz
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
   }, [menuOpen]);
 
   const handleNavigate = (href: string) => {
@@ -36,7 +41,9 @@ const Header = () => {
         {/* Navbar (Desktop) */}
         <nav className="hidden lg:flex gap-4 text-sm text-gray-700">
           <ul className="flex items-center gap-10">
-            {links.map((link) => (
+          {links
+            .filter((link) => !(link.href === "/auth/login" && isLoggedIn)) // Login bo'lsa Signupni yashirish
+            .map((link) => (
               <li key={link.id}>
                 <button
                   onClick={() => handleNavigate(link.href)}
@@ -49,7 +56,8 @@ const Header = () => {
                   {link.title}
                 </button>
               </li>
-            ))}
+          ))}
+
           </ul>
         </nav>
 
@@ -76,12 +84,16 @@ const Header = () => {
               }`}
               onClick={() => navigate("/cart")}
             />
-            <FiUser
-              className={`text-xl cursor-pointer ${
-                location.pathname === "/account" ? "text-blue-600" : ""
-              }`}
+            
+            {/* User icon (Login bo'lsa orqa foni ko'k bo'ladi) */}
+            <div
               onClick={() => handleNavigate("/account")}
-            />
+              className={`cursor-pointer p-2 rounded-full ${
+                isLoggedIn ? "bg-red-500 text-white" : "bg-transparent text-gray-700"
+              }`}
+            >
+              <FiUser className="text-xl" />
+            </div>
           </div>
         </div>
 
@@ -135,7 +147,13 @@ const Header = () => {
               location.pathname === "/account" ? "text-blue-400" : ""
             }`}
           >
-            <FiUser className="text-xl cursor-pointer" />
+            <div
+              className={`p-2 rounded-full ${
+                isLoggedIn ? "bg-blue-600 text-white" : "bg-transparent text-gray-700"
+              }`}
+            >
+              <FiUser className="text-xl" />
+            </div>
             <span>Profile</span>
           </button>
         </div>
@@ -159,29 +177,8 @@ const Header = () => {
             <BiPhoneCall className="text-2xl" />
             <span>Contact</span>
           </button>
-          <button
-            onClick={() => setSearchOpen(!searchOpen)}
-            className="flex flex-col items-center gap-1"
-          >
-            <FaSearch className="text-2xl" />
-            <span>Search</span>
-          </button>
         </div>
       </div>
-
-      {/* Search Modal */}
-      {searchOpen && (
-        <div className="fixed top-0 left-0 w-full px-4 py-2 bg-black backdrop-blur-lg text-white flex items-center gap-2 transition-all duration-300">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full bg-transparent outline-none border-b-2 border-white px-2 py-1 text-lg"
-          />
-          <button onClick={() => setSearchOpen(false)} className="text-white text-xl">
-            <FaTimes />
-          </button>
-        </div>
-      )}
     </header>
   );
 };
