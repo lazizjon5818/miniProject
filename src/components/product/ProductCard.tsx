@@ -1,9 +1,9 @@
-import React, { useEffect, useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { FaHeart, FaEye, FaStar, FaRegStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { addToWishlist, removeFromWishlist, setWishlist } from "../../redux/wishlistSlice";
+import { addToWishlist, removeFromWishlist } from "../../redux/wishlistSlice";
 
 interface Product {
   id: number;
@@ -21,39 +21,22 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const wishlist = useSelector((state: RootState) => state.wishlist.items);
-  
+
   const isInWishlist = useMemo(
     () => wishlist.some((item) => item.id === product.id),
     [wishlist, product.id]
   );
 
-  useEffect(() => {
-    try {
-      const savedWishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-      if (Array.isArray(savedWishlist)) {
-        dispatch(setWishlist(savedWishlist));
-      }
-    } catch (error) {
-      console.error("Error parsing wishlist from localStorage:", error);
-    }
-  }, [dispatch]);
-
   const handleWishlistClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
-      const updatedWishlist = isInWishlist
-        ? wishlist.filter((item) => item.id !== product.id)
-        : [...wishlist, product];
-
-      dispatch(isInWishlist ? removeFromWishlist(product.id) : addToWishlist(product));
-
-      try {
-        localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-      } catch (error) {
-        console.error("Error updating wishlist in localStorage:", error);
+      if (isInWishlist) {
+        dispatch(removeFromWishlist(product.id));
+      } else {
+        dispatch(addToWishlist(product));
       }
     },
-    [isInWishlist, wishlist, product, dispatch]
+    [isInWishlist, product, dispatch]
   );
 
   return (

@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { removeFromWishlist, setWishlist } from "../../redux/wishlistSlice"; // setWishlist action qo'shildi
+import { removeFromWishlist, setWishlist } from "../../redux/wishlistSlice";
 import { FaHeart, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../config/Loading";
 
 const Wishlist: React.FC = () => {
   const wishlist = useSelector((state: RootState) => state.wishlist.items);
+  const loading = useSelector((state: RootState) => state.wishlist.loading);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -15,11 +17,14 @@ const Wishlist: React.FC = () => {
     dispatch(setWishlist(savedWishlist));
   }, [dispatch]);
 
-  const handleRemove = (productId: string) => {
-    const updatedWishlist = wishlist.filter((item) => item.id !== productId);
+  const handleRemove = (productId: number) => {
     dispatch(removeFromWishlist(productId));
-    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist)); 
+    const updatedWishlist = wishlist.filter((item) => item.id !== productId);
+    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
   };
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -55,12 +60,12 @@ const Wishlist: React.FC = () => {
                   className="w-3/4 h-full object-contain cursor-pointer"
                   onClick={() => navigate(`/product/${product.id}`)}
                 />
-                 <button className="absolute bottom-0 left-0 right-0 bg-black text-white py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <button className="absolute bottom-0 left-0 right-0 bg-black text-white py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   Add To Cart
                 </button>
               </div>
 
-               <h2 className="text-lg font-semibold mt-2">{product.title}</h2>
+              <h2 className="text-lg font-semibold mt-2">{product.title}</h2>
               <p className="text-red-600 font-bold">${product.price}</p>
               <div className="flex items-center gap-1">
                 {Array.from({ length: 5 }).map((_, index) => (
